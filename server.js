@@ -8,7 +8,7 @@ db.authenticate()
   })
   .catch(err => console.log(err));
 
-db.sync()
+db.sync({ force: false })
   .then(() => {
     console.log('datos sincronizados'.magenta);
   })
