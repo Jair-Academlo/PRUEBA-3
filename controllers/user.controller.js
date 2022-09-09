@@ -76,4 +76,80 @@ const iniciarSession = async (req, res) => {
   }
 };
 
-module.exports = { registrarusuario, iniciarSession };
+const actualizarTitulo = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, email } = req.body;
+
+    const userId = await Users.findOne({ where: { id } });
+
+    if (!userId) {
+      return res.status(404).josn({
+        message: 'no se pudo actualizar el titulo, id no encontrado',
+        status: 'operacion fallida',
+      });
+    } else {
+      await userId.update({ name, email });
+    }
+
+    res.status(200).json({
+      message: 'datos actualizados',
+      status: 'operacion exitosa',
+      userId,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const desabilitarUsuario = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const userId = await Users.findOne({ where: { id } });
+
+    if (!userId) {
+      return res.status(404).json({
+        message: 'la cuenta no se puede desabilitar, id no encontrado',
+        status: 'operacion fallida',
+      });
+    } else if (userId.status === 'active') {
+      await userId.update({ status: 'disable' });
+    } else {
+      return res.status(404).json({
+        message: 'la cuenta no se puede desabilitar, el status no es activo',
+        status: 'operacion fallida',
+      });
+    }
+
+    res.status(200).json({
+      message: 'cuenta desabilitada',
+      status: 'operacion exitosa',
+      userId,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const cuentasActivas = async (req, res) => {
+  try {
+    const allUsers = await Users.findAll({ where: { status: 'active' } });
+
+    res.status(200).json({
+      message: 'todos los usuarios',
+      status: 'operacion exitosa',
+      allUsers,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+module.exports = {
+  registrarusuario,
+  iniciarSession,
+  actualizarTitulo,
+  desabilitarUsuario,
+  cuentasActivas,
+};
