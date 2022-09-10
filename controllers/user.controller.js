@@ -69,33 +69,33 @@ const iniciarSession = async (req, res) => {
       message: 'todo salio bien',
       status: 'operacion exitosa',
       user,
-      //token,
+      token,
     });
   } catch (error) {
     console.log(error);
   }
 };
 
-const actualizarTitulo = async (req, res) => {
+const actualizarTitulo = async (req, res, next) => {
   try {
-    const { id } = req.params;
+    const { user } = req;
     const { name, email } = req.body;
 
-    const userId = await Users.findOne({ where: { id } });
+    //const userId = await Users.findOne({ where: { id } });
 
-    if (!userId) {
+    /*if (!user) {
       return res.status(404).josn({
         message: 'no se pudo actualizar el titulo, id no encontrado',
         status: 'operacion fallida',
       });
-    } else {
-      await userId.update({ name, email });
-    }
+    } else {*/
+    await user.update({ name, email });
+    //}
 
     res.status(200).json({
       message: 'datos actualizados',
       status: 'operacion exitosa',
-      userId,
+      user,
     });
   } catch (error) {
     console.log(error);
