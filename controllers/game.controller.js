@@ -1,4 +1,5 @@
 const { Games } = require('../models/games.model');
+const { Reviews } = require('../models/reviews.model');
 
 const crearJuego = async (req, res) => {
   try {
@@ -86,9 +87,32 @@ const desabilitarJuego = async (req, res) => {
   }
 };
 
+const crearReseña = async (req, res) => {
+  try {
+    const { sessionUser } = req;
+    const { gameId } = req.params;
+    const { comments } = req.body;
+
+    const nuevaReseña = await Reviews.create({
+      userId: sessionUser.id,
+      gameId,
+      comments,
+    });
+
+    res.status(201).json({
+      message: 'reseña creada',
+      status: 'operacion exitosa',
+      nuevaReseña,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 module.exports = {
   crearJuego,
   todosLosJuegos,
   ActualizarTitulo,
   desabilitarJuego,
+  crearReseña,
 };
