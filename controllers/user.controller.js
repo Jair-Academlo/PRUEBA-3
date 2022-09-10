@@ -102,19 +102,19 @@ const actualizarTitulo = async (req, res, next) => {
   }
 };
 
-const desabilitarUsuario = async (req, res) => {
+const desabilitarUsuario = async (req, res, next) => {
   try {
-    const { id } = req.params;
+    const { user } = req;
 
-    const userId = await Users.findOne({ where: { id } });
+    // const userId = await Users.findOne({ where: { id } });
 
-    if (!userId) {
+    /* if (!userId) {
       return res.status(404).json({
         message: 'la cuenta no se puede desabilitar, id no encontrado',
         status: 'operacion fallida',
       });
-    } else if (userId.status === 'active') {
-      await userId.update({ status: 'disable' });
+    } else */ if (user.status === 'active') {
+      await user.update({ status: 'disable' });
     } else {
       return res.status(404).json({
         message: 'la cuenta no se puede desabilitar, el status no es activo',
@@ -125,7 +125,7 @@ const desabilitarUsuario = async (req, res) => {
     res.status(200).json({
       message: 'cuenta desabilitada',
       status: 'operacion exitosa',
-      userId,
+      user,
     });
   } catch (error) {
     console.log(error);
