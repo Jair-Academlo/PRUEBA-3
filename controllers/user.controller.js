@@ -62,7 +62,7 @@ const iniciarSession = async (req, res) => {
     }*/
 
     const token = await jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
-      expiresIn: '8h',
+      expiresIn: '3 days',
     });
 
     res.status(200).json({
@@ -137,7 +137,7 @@ const cuentasActivas = async (req, res) => {
     const allUsers = await Users.findAll({ where: { status: 'active' } });
 
     res.status(200).json({
-      message: 'todos los usuarios',
+      message: 'todos los usuarios activos',
       status: 'operacion exitosa',
       allUsers,
     });

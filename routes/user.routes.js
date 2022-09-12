@@ -21,9 +21,9 @@ const router = express.Router();
 router.post('/signup', createUserValidators, registrarusuario);
 router.post('/login', iniciarSession);
 
-//protect session+
+//protect session
 //router.use(protectSession);
-router.get('/', cuentasActivas);
+router.get('/', protectSession, cuentasActivas);
 router.patch(
   '/:id',
   protectSession, // protege la session verificando el token

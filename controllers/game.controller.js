@@ -1,5 +1,6 @@
 const { Games } = require('../models/games.model');
 const { Reviews } = require('../models/reviews.model');
+const { Consoles } = require('../models/consoles.model');
 
 const crearJuego = async (req, res) => {
   try {
@@ -19,7 +20,20 @@ const crearJuego = async (req, res) => {
 
 const todosLosJuegos = async (req, res) => {
   try {
-    const Allgames = await Games.findAll();
+    const Allgames = await Games.findAll({
+      attributes: ['id', 'title', 'genre', 'status'],
+      include: [
+        {
+          model: Reviews,
+          attributes: ['comments'],
+        },
+        {
+          model: Consoles,
+          attributes: ['name', 'company'],
+          through: { attributes: [] },
+        },
+      ],
+    });
 
     res.status(200).json({
       message: 'todos los juegos creados',
